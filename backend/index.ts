@@ -1,7 +1,6 @@
 import express from "express";
-import { placeorder, userschema } from "./zod";
+import { placeorder, userschema } from "./src/types/zod";
 import  jwt  from "jsonwebtoken"
-import { loopback } from "./loopbackfunction";
 
 const app = express();
 
@@ -10,9 +9,7 @@ const app = express();
 
 
 app.post("/api/reset" , async(req, res) => { 
-    const responseFromEngine = await loopback( {
-        messageType : "Reset"
-    } ) 
+   
 }) 
 
 app.post(" /api/users" , async ( req , res ) => { 
@@ -24,12 +21,7 @@ app.post(" /api/users" , async ( req , res ) => {
          })
         return 
     } 
-    
-    const response = await loopback( { messageType :"CreateUser" , 
-        userId : parseddata.data.userId,
-        initialBalance : parseddata.data.initialBalance
-     })
-
+  
      res.json({
          userId:  parseddata.data.userId
      })
@@ -38,12 +30,7 @@ app.post(" /api/users" , async ( req , res ) => {
 app.post( "/api/orders" , async( req,res ) => {
     const parseddata = placeorder.safeParse( req.body)
 
-    if( parseddata.error) { 
-        res.json({ 
-            msg : ""
-        }) 
-        return 
-    }
+    
 })
 
 app.listen(3000, () => {
