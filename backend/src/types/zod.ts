@@ -1,8 +1,8 @@
 import { z } from "zod";
 
-export const userschema = z.object({
-    "userId": z.string().trim().min(1),
-    "initialBalance": z.number
+export const addBalanceSchema = z.object({
+    amount : z.string().trim(),
+    sym : z.string().trim()
 })
 
 export const authSchema = z.object ({
@@ -12,13 +12,12 @@ export const authSchema = z.object ({
 
 const side = z.enum(["short", "long"]);
 const type = z.enum(["limit", "market"])
-export const placeorder = z.object({
+export const placeorderSchema = z.object({
     "userId": z.string().trim().min(1),
     "symbol": z.string().trim().min(1),
     "side": side,
     "type": type,
-    "price": z.number(),
+    "price": z.string().trim(),
     "quantity": z.number(),
     "leverage": z.number(),
-    "postOnly": false
 })
