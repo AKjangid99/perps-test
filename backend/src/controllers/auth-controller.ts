@@ -4,8 +4,6 @@ import { authSchema } from "../types/zod.js";
 import { createToken } from "../utils/auth.js";
 import { sendValidationError } from "../utils/validation.js";
 import { userdata } from "../strore/userlist.js";
-import  jwt  from "jsonwebtoken";
-import { env } from "../utils/env.js";
 
 export async function signup(req: Request, res: Response): Promise<void> {
   const parsedBody = authSchema.safeParse(req.body);

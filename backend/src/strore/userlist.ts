@@ -1,6 +1,14 @@
-export enum Types  {"short", "long"};
-export enum orderType { "limit" , "market"};
-export enum OrderStatusType { "Filled" , "Cancelled", "PartiallyFilled"}
+export enum Side  { short = "short",
+    long = "long"};
+export enum Types { limit = "limit",
+    market = "market"};
+
+export enum OrderStatus {
+  PartiallyFilled,
+  Filled,
+  Open,
+  Cancelled
+}
 
 export type Userdata = {
     "id" : string ,
@@ -14,7 +22,7 @@ export type Balance ={
 }
 
 export type Position ={
-    market : string ,
+    symbol : string ,
     type : Types,
     qty : number,
     margin : string, 
@@ -23,13 +31,17 @@ export type Position ={
 }
 
 export type Order = {
-    orderId : string ,
-    market : string ,
-    type : Types,
-    qty : number,
-    margin : string,
-    orderType : orderType,
-    status : OrderStatusType
+  orderId: string,
+  userId: string,
+  status: OrderStatus,
+  side: Side,
+  type: Types,
+  quantity: string,
+  filledQty: string,
+  price: string,
+  symbol: string,
+  createdAt: Date,
+  leverage: string,
 }
 
 

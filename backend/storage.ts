@@ -1,19 +1,5 @@
-
-// export const balances: Map<string, Wallet> = new Map<string, Wallet>()
-
 export const sellOrderPrice: number[] = []
 export const buyOrderPrice: number[] = []
-
-
-
-export type fills = {
-    makerId: string,
-    takerId: string,
-    price: number,
-    // symbol : string, 
-    orderId: string
-
-}
 
 export type Payload = {
     userId: string,

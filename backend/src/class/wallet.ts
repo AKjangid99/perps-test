@@ -44,5 +44,17 @@ export const wallet = {
 
     getbalance( userId : string ) {
         return walletData.get( userId )
+    },
+
+    lockBalance( userId : string , lockingbalance : string ) {
+        let userbalance : Balance = walletData.get( userId )!
+
+        let updatedAvailable = SubtractStrings( userbalance.availble , lockingbalance )
+        let updatedLocked = addStrings( userbalance.locked , lockingbalance )
+
+        let updatedBalance : Balance  = {
+            availble : updatedAvailable,
+            locked : updatedLocked
+        }
     }
 }
