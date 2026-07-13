@@ -265,12 +265,11 @@ function matchBestprice( order : Order , bestPriceArray : string[]  ){
             let existingOrders = orderBook[mySide].get(order.price) ?? [];
             orderBook[mySide].set(order.price, [...existingOrders, newBid]);
         } else {
-            // Market orders that run out of liquidity are cancelled/expired immediately
             order.status = OrderStatus.Cancelled;
         }
 
 
-        
+
     }
 
 }
