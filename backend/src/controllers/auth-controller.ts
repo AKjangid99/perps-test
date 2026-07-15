@@ -3,7 +3,8 @@ import type { Request, Response } from "express";
 import { authSchema } from "../types/zod.js";
 import { createToken } from "../utils/auth.js";
 import { sendValidationError } from "../utils/validation.js";
-import { userdata } from "../strore/userlist.js";
+// import { userdata } from "../strore/userlist.js";
+import { prisma } from "../utils/db.js";
 
 export async function signup(req: Request, res: Response): Promise<void> {
   const parsedBody = authSchema.safeParse(req.body);
@@ -13,38 +14,60 @@ export async function signup(req: Request, res: Response): Promise<void> {
   }
   const { username, password } = parsedBody.data;
   const hashedPassword = await bcrypt.hash(password, 10);
-  const id = crypto.randomUUID()
-  userdata.set( id , { id  , username , password : hashedPassword } )
 
-  res.status(200).json(
-     { id  , username , token : createToken ({ userId : id }) }
+  const newUser = await prisma.user.create({
+    data: {
+      username,
+      password: hashedPassword,
+    },
+  });
+
+  const token = createToken({ userId: newUser.id });
+
+  res.status(201).json({
+    message: "User created successfully",
+    user: {
+      id: newUser.id,
+      username: newUser.username,
+    },
+    token
+  }
   )
 }
 
 export async function signin(req: Request, res: Response): Promise<void> {
   const signInBody = req.body;
   const parsedBody = authSchema.safeParse(signInBody);
-  if (!parsedBody.data || !req.Id){
-    res.status(403).json({error : "Incorrect"});
-    return;
-  }
-  
-  let userDetails = userdata.get(req.Id)
-
-  if (!userDetails){
-    res.status(404).json({error : "User Not Found"});
+  if (!parsedBody.data || !req.Id) {
+    res.status(403).json({ error: "Incorrect" });
     return;
   }
 
-  const checkPassword = await bcrypt.compare(parsedBody.data.password!, userDetails.password);
-  if (!checkPassword){
-    res.status(403).json({
-      error : "Invalid Password"
-    })
+  const { username, password } = parsedBody.data;
+
+  const user = await prisma.user.findUnique({
+    where: { username },
+  });
+
+  if (!user) {
+    res.status(401).json({ error: "Invalid username or password" });
     return;
   }
 
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+  if (!isPasswordValid) {
+    res.status(401).json({ error: "Invalid username or password" });
+    return;
+  }
+
+  const token = createToken({ userId: user.id });
   res.status(200).json({
-    token : createToken ( { userId : req.Id } )
-  })
+    message: "Logged in successfully",
+    user: {
+      id: user.id,
+      username: user.username,
+    },
+    token,
+  });
+
 }

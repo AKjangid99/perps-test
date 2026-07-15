@@ -1,6 +1,6 @@
 import type { Side } from "./userlist";
 
-export type Bid = {
+export type RestingOrder = {
     orderId: string,
     userId: string,
     side: Side,
@@ -11,12 +11,9 @@ export type Bid = {
     createdAt: Date
 }
 
-type Orderbook = {
-    bids: Map<string, Bid[]>,
-    asks: Map<string, Bid[]>,
+type OrderBook = {
+    bids: Map<string, RestingOrder[]>,
+    asks: Map<string, RestingOrder[]>,
 }
 
-export const Orderbooks: Map<string, Orderbook> = new Map<string, Orderbook>();
-
-
- 
+export const ORDERBOOKS: Map<string, OrderBook> = new Map<string, OrderBook>();

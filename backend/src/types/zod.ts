@@ -1,22 +1,32 @@
 import { z } from "zod";
-import { Side, Types } from "../strore/userlist";
+
+
+export enum Side {
+    short = "short",
+    long = "long"
+};
+export enum Types {
+    limit = "limit",
+    market = "market"
+};
 
 export const addBalanceSchema = z.object({
-    amount : z.string().trim(),
-    sym : z.string().trim()
+    amount: z.string().trim(),
+    sym: z.string().trim()
 })
 
-export const authSchema = z.object ({
-    "username" : z.string().trim().min(1),
-    "password" : z.string().trim().min(1)
+export const authSchema = z.object({
+    "username": z.string().trim().min(1),
+    "password": z.string().trim().min(1)
 })
 
 
-export const placeorderSchema = z.object({
+export const createOrderSchema = z.object({
     "symbol": z.string().trim().min(1),
     "side": z.enum(Side),
     "type": z.enum(Types),
     "price": z.string().trim(),
-    "quantity": z.string().trim(),
+    "qty": z.string().trim(),
     "leverage": z.string().trim(),
 })
+
